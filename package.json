@@ -2,7 +2,7 @@
   "name": "simplecqrs",
   "version": "0.0.9",
   "description": "A project to demonstrate the Command Query Segregation pattern",
-  "main": "dist/src/app.js",
+  "main": "distx/src/app.js",
   "scripts": {
     "start": "tsc && ts-node dist/src/app.js",
     "test": "mocha -r ts-node/register tests/**/*-test.ts --exit"

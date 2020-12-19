@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import {Connection} from "typeorm";
-import {createConnection} from "typeorm";
+import {createConnection, getConnectionManager} from "typeorm";
 import {Customer} from "./entity/Customer";
 import {Order} from "./entity/Order";
 import {CustomerInput} from "./inputs/CustomerInput";
@@ -8,9 +8,40 @@ import {OrderInput} from "./inputs/OrderInput";
 
 export class DataManager {
     public connection!: Connection;
+    public connectionOptions: any = {
+        cli: {
+            entitiesDir: "src/mariadb/entity",
+            migrationsDir: "src/mariadb/migration",
+            subscribersDir: "src/mariadb/subscriber",
+        },
+        database: "simplecqrs",
+        entities: [
+            `${__dirname}/entity/**/*{.ts,.js}`,
+        ],
+        host: "127.0.0.1",
+        logging: false,
+        migrations: [
+            `${__dirname}/migration/**/*{.ts,.js}`,
+        ],
+        password: "password",
+        port: 3306,
+        subscribers: [
+            `${__dirname}/subscriber/**/*{.ts,.js}`,
+        ],
+        synchronize: true,
+        type: "mysql",
+        username: "root",
+    };
     public async connectToDb(): Promise<Connection> {
+        if (getConnectionManager().has("default")) {
+            // await getConnectionManager().get().close();
+        }
 
-        if (!this.connection) { this.connection = await createConnection(); }
+        if (!this.connection) {
+            this.connection = await createConnection(this.connectionOptions);
+            // tslint:disable-next-line:no-console
+            console.log(`Database connected at ${new Date()}`);
+        }
         return this.connection;
     }
 

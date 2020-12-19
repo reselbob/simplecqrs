@@ -62,12 +62,13 @@ app.post("/orders", async (req, res) => {
 });
 
 // @ts-ignore
-export const server = app.listen(port, (err) => {
+export const server = app.listen(port, async (err) => {
     // @ts-ignore
     if (err) {
         // tslint:disable-next-line:no-console
         return console.error(err);
     }
+    // await dataManager.connectToDb();
     // tslint:disable-next-line:no-console
     return console.log(`server is listening on ${port}`);
 });
