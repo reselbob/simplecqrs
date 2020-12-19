@@ -1,0 +1,24 @@
+{
+   "cli": {
+      "entitiesDir": "src/mariadb/entity",
+      "migrationsDir": "src/mariadb/migration",
+      "subscribersDir": "src/mariadb/subscriber"
+   },
+   "database": "simplecqrs",
+   "entities": [
+      "src/mariadb/entity/**/*{.ts,.js}"
+   ],
+   "host": "127.0.0.1",
+   "logging": false,
+   "migrations": [
+      "src/mariadb/migration/**/*{.ts,.js}"
+   ],
+   "password": "password",
+   "port": 3306,
+   "subscribers": [
+      "src/mariadb/subscriber/**/*{.ts,.js}"
+   ],
+   "synchronize": true,
+   "type": "mysql",
+   "username": "root"
+}
