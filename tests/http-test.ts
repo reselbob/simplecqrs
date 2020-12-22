@@ -1,17 +1,17 @@
 import {expect} from "chai";
 import {before, describe, it} from "mocha";
 import request from "supertest";
-import {DataManager} from "../src/mariadb/DataManager";
-import {Customer} from "../src/mariadb/entity/Customer";
-import {Order} from "../src/mariadb/entity/Order";
-import {CustomerInput} from "../src/mariadb/inputs/CustomerInput";
-import {OrderInput} from "../src/mariadb/inputs/OrderInput";
+import {WriteDataManager} from "../src/write_db/WriteDataManager";
+import {Customer} from "../src/write_db/entity/Customer";
+import {Order} from "../src/write_db/entity/Order";
+import {CustomerInput} from "../src/write_db/inputs/CustomerInput";
+import {OrderInput} from "../src/write_db/inputs/OrderInput";
 
 import {server, shutdown} from "../src/app";
 
 import Faker from "faker";
 
-const dataManager: DataManager = new DataManager();
+const dataManager: WriteDataManager = new WriteDataManager();
 
 describe("HTTP Test", () => {
 

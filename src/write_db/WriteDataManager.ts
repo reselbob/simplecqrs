@@ -7,7 +7,7 @@ import {CustomerInput} from "./inputs/CustomerInput";
 import {OrderInput} from "./inputs/OrderInput";
 import {dbconfig} from "./ormconfig";
 
-export class DataManager {
+export class WriteDataManager {
     public connection!: Connection;
     public async connectToDb(): Promise<Connection> {
         if (getConnectionManager().has("default")) {

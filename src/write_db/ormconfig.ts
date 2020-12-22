@@ -1,8 +1,8 @@
 export const dbconfig = {
     cli: {
-        entitiesDir: "src/mariadb/entity",
-        migrationsDir: "src/mariadb/migration",
-        subscribersDir: "src/mariadb/subscriber",
+        entitiesDir: "src/write_db/entity",
+        migrationsDir: "src/write_db/migration",
+        subscribersDir: "src/write_db/subscriber",
     },
     database: "simplecqrs",
     entities: [

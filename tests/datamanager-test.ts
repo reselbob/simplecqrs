@@ -1,17 +1,17 @@
 import {expect} from "chai";
 import {before, describe, it} from "mocha";
-import {DataManager} from "../src/mariadb/DataManager";
-import {Customer} from "../src/mariadb/entity/Customer";
-import {Order} from "../src/mariadb/entity/Order";
+import {Customer} from "../src/write_db/entity/Customer";
+import {Order} from "../src/write_db/entity/Order";
+import {WriteDataManager} from "../src/write_db/WriteDataManager";
 
-import {CustomerInput} from "../src/mariadb/inputs/CustomerInput";
-import {OrderInput} from "../src/mariadb/inputs/OrderInput";
+import {CustomerInput} from "../src/write_db/inputs/CustomerInput";
+import {OrderInput} from "../src/write_db/inputs/OrderInput";
 
 import Faker from "faker";
 
-const dataManager: DataManager = new DataManager();
+const dataManager: WriteDataManager = new WriteDataManager();
 
-describe("DataManager Tests", () => {
+describe("WriteDataManager Tests", () => {
 
     after(async () => {
         await dataManager.close();

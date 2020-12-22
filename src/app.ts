@@ -2,10 +2,17 @@ import env from "dotenv";
 
 env.config();
 import express from "express";
-import {DataManager} from "../src/mariadb/DataManager";
-import {OrderInput} from "../src/mariadb/inputs/OrderInput";
+import {ReadDataManager} from "./read_db/ReadDataManager";
+import {OrderInput} from "./write_db/inputs/OrderInput";
+import {WriteDataManager} from "./write_db/WriteDataManager";
 
-const dataManager: DataManager = new DataManager();
+// let's put the check here, for how. When we move the ReadDB into its own service thing will change.
+if (!process.env.MONGODB_URL) {
+    throw new Error("The required environment variable, MONGODB_URL does not exist or has no value");
+}
+
+const writeDataManager: WriteDataManager = new WriteDataManager();
+const readDataManager: ReadDataManager = new ReadDataManager();
 
 const app = express();
 const port = process.env.APP_PORT || 3000;
@@ -20,7 +27,7 @@ app.use((err: { stack: any; }, req: any, res: { status: (arg0: number) => { send
 });
 
 app.get("/customers", async (req, res) => {
-    const customers = await dataManager.getCustomers()
+    const customers = await readDataManager.getCustomers()
         .catch((err: Error) => {
             res.status(500).send(JSON.stringify(err));
         });
@@ -28,7 +35,7 @@ app.get("/customers", async (req, res) => {
 });
 
 app.get("/customers/:id", async (req, res) => {
-    const customer = await dataManager.getCustomer(req.params.id)
+    const customer = await readDataManager.getCustomer(req.params.id)
         .catch((err: Error) => {
             res.status(500).send(err);
         });
@@ -36,7 +43,7 @@ app.get("/customers/:id", async (req, res) => {
 });
 
 app.get("/orders", async (req, res) => {
-  const orders = await dataManager.getOrders()
+  const orders = await readDataManager.getOrders()
       .catch((err: Error) => {
         res.status(500).send(err);
       });
@@ -44,7 +51,7 @@ app.get("/orders", async (req, res) => {
 });
 
 app.get("/orders/:id", async (req, res) => {
-    const order = await dataManager.getOrder(req.params.id)
+    const order = await readDataManager.getOrder(req.params.id)
         .catch((err: Error) => {
             res.status(500).send(err);
         });
@@ -54,7 +61,7 @@ app.get("/orders/:id", async (req, res) => {
 app.post("/orders", async (req, res) => {
     const orderInput = req.body;
     const input = orderInput.data || orderInput;
-    const order = await dataManager.setOrder(input)
+    const order = await writeDataManager.setOrder(input)
         .catch((err: Error) => {
             res.status(500).send(err);
         });
@@ -68,7 +75,7 @@ export const server = app.listen(port, async (err) => {
         // tslint:disable-next-line:no-console
         return console.error(err);
     }
-    // await dataManager.connectToDb();
+    // await writeDataManager.connectToDb();
     // tslint:disable-next-line:no-console
     return console.log(`server is listening on ${port}`);
 });
