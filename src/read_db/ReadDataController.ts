@@ -25,7 +25,9 @@ export class ReadDataController {
             throw new Error("The required environment variable, MONGODB_URL does not exist or has no value");
         }
         if (!this.db) {
-            const conn = await connect(process.env.MONGODB_URL, {useNewUrlParser: true, useUnifiedTopology: true});
+            // tslint:disable-next-line:max-line-length
+            const opts = {useNewUrlParser:  true, useUnifiedTopology:  true, useFindAndModify:  false, useCreateIndex:  true };
+            const conn = await connect(process.env.MONGODB_URL, opts );
             this.db = connection;
         }
         this.db.on("open", this.connected);

@@ -70,6 +70,7 @@ app.post("/orders", async (req, res) => {
 
     // TODO the quantity to count conversion is a danger sign
     const readInput: IOrderInput = {
+        _id: order.id,
         quantity: input.count,
         // tslint:disable-next-line:object-literal-sort-keys
         customer: {
@@ -93,7 +94,6 @@ export const server = app.listen(port, async (err) => {
         // tslint:disable-next-line:no-console
         return console.error(err);
     }
-    // await writeDataManager.connectToDb();
     // tslint:disable-next-line:no-console
     return console.log(`server is listening on ${port}`);
 });

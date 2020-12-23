@@ -1,4 +1,5 @@
 export interface IOrderInput {
+    _id: string;
     description: string;
     quantity: number;
     customer: ICustomerInput;

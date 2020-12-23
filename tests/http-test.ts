@@ -68,27 +68,22 @@ describe("HTTP Test", () => {
             .expect(200)
             .then((res: any) => {
                 firstCustomer = res.body[0];
-                // await expect(res.body[0].email).to.be.a("string", "Customers are good");
                 expect(res.body.length).to.be.greaterThan(0);
-                // tslint:disable-next-line:no-console
-                console.log(res.body.length);
-                // tslint:disable-next-line:no-console
-                // await console.log(res.body);
-            });
-        // @ts-ignore
-        await request(server)
-            .get(`/customers/${firstCustomer.email}`)
-            .set("Accept", "application/json")
-            .expect(200)
+            })
             .then((res: any) => {
-                const customer = res.body;
-                expect(customer.email).to.equal(firstCustomer.email );
-                expect(customer.firstName).to.equal(firstCustomer.firstName );
-                expect(customer.lastName).to.equal(firstCustomer.lastName);
-
-                // tslint:disable-next-line:no-console
-                console.log(customer);
+                // @ts-ignore
+                request(server)
+                    .get(`/customers/${firstCustomer.email}`)
+                    .set("Accept", "application/json")
+                    .expect(200)
+                    .then((res2: any) => {
+                        const customer = res2.body;
+                        expect(customer.email).to.equal(firstCustomer.email );
+                        expect(customer.firstName).to.equal(firstCustomer.firstName );
+                        expect(customer.lastName).to.equal(firstCustomer.lastName);
+                    });
             });
+
     });
 
     it("Can GET Orders via HTTP", async () => {

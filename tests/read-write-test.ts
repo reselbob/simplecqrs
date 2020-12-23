@@ -21,9 +21,10 @@ describe("ReadWrite Tests", () => {
     it("Can Read Orders from DB", async () => {
         const result = await readDataManager.getOrders();
         expect(result).to.be.an("array");
+        expect(result.length).to.be.greaterThan(0, `Array length is ${result.length}`);
     });
 
-    it("Can Write Orders to DB", async () => {
+    it("Can Write Orders to Read DB", async () => {
         expect(connection).to.be.an("object");
         // @ts-ignore
         expect(connection.readyState).to.be.greaterThan(0);
@@ -33,9 +34,11 @@ describe("ReadWrite Tests", () => {
         const id = uuidv4();
         const quantity =  Faker.random.number(10);
         const description =  Faker.lorem.words(6);
-
+        // tslint:disable-next-line:variable-name
+        const _id = uuidv4();
         // @ts-ignore
         const orderInput: any = {
+            _id,
             // tslint:disable-next-line:object-literal-sort-keys
             customer: {
                 firstName,
@@ -46,8 +49,15 @@ describe("ReadWrite Tests", () => {
             description,
             quantity,
         };
-        const result = await readDataManager.setOrder(orderInput);
+        let result = await readDataManager.setOrder(orderInput);
         expect(result._doc).to.be.an("object");
-
+        result = await readDataManager.getOrder(_id);
+        expect(result._doc).to.be.an("object");
+        expect(result._id).to.equal(orderInput._id);
+        expect(result.description).to.equal(orderInput.description);
+        expect(result.quantity).to.equal(orderInput.quantity);
+        expect(result.customer.firstName).to.equal(orderInput.customer.firstName);
+        expect(result.customer.lastName).to.equal(orderInput.customer.lastName);
+        expect(result.customer.email).to.equal(orderInput.customer.email);
     });
 }).timeout(5000);

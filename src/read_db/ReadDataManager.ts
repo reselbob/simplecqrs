@@ -19,6 +19,7 @@ export class ReadDataManager {
 
     public async setOrder(orderInput: IOrderInput): Promise<any> {
         const order = new ReadDataController.Models.Order();
+        order._id = orderInput._id;
         order.description = orderInput.description;
         order.quantity = orderInput.quantity;
         order.customer.email = orderInput.customer.email;
@@ -42,7 +43,7 @@ export class ReadDataManager {
     }
 
     public async getOrder(id: string): Promise<any> {
-        return await ReadDataController.Models.Order.findOne({id});
+        return ReadDataController.Models.Order.findOne({_id: id});
     }
 
     public async getCustomers(): Promise<ICustomer[]> {

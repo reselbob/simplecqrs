@@ -10,7 +10,7 @@ export class Order {
 
     constructor() {
         const schema = new Schema( {
-            // _id: { type: String, required: true },
+            _id: { type: String, required: true },
             // tslint:disable-next-line:object-literal-sort-keys
             description: { type: String, required: true },
             quantity: { type: Number, required: true },
@@ -26,7 +26,7 @@ export class Order {
                     type: Date,
                 },
             },
-        });
+        }, { _id: false });
 
         // Handler **must** take 3 parameters: the error that occurred, the document
 // in question, and the `next()` function
