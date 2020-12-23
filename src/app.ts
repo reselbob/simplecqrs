@@ -1,9 +1,11 @@
 import env from "dotenv";
-
 env.config();
+
 import express from "express";
+import {ICustomerInput, IOrderInput} from "./read_db/inputs/Inputs";
+import {IOrder} from "./read_db/models/IOrder";
 import {ReadDataManager} from "./read_db/ReadDataManager";
-import {OrderInput} from "./write_db/inputs/OrderInput";
+import {Order} from "./write_db/entity/Order";
 import {WriteDataManager} from "./write_db/WriteDataManager";
 
 // let's put the check here, for how. When we move the ReadDB into its own service thing will change.
@@ -61,15 +63,31 @@ app.get("/orders/:id", async (req, res) => {
 app.post("/orders", async (req, res) => {
     const orderInput = req.body;
     const input = orderInput.data || orderInput;
-    const order = await writeDataManager.setOrder(input)
+    const order: any = await writeDataManager.setOrder(input)
         .catch((err: Error) => {
             res.status(500).send(err);
         });
+
+    // TODO the quantity to count conversion is a danger sign
+    const readInput: IOrderInput = {
+        quantity: input.count,
+        // tslint:disable-next-line:object-literal-sort-keys
+        customer: {
+            email: input.customerEmail,
+            firstName: input.customerFirstName,
+            lastName: input.customerLastName,
+        },
+        description: input.description,
+    };
+    await readDataManager.setOrder(readInput);
     res.send(order);
 });
 
 // @ts-ignore
 export const server = app.listen(port, async (err) => {
+    await readDataManager.connect();
+    // tslint:disable-next-line:no-console
+    console.log(`Read database connected at ${new Date()}`);
     // @ts-ignore
     if (err) {
         // tslint:disable-next-line:no-console

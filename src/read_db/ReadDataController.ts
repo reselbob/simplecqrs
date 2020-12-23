@@ -1,7 +1,5 @@
 import { connect, connection, Connection, model } from "mongoose";
 import {Customer, ICustomerModel} from "./models/Customer";
-import {ICustomer} from "./models/ICustomer";
-import {IOrder} from "./models/IOrder";
 import {IOrderModel, Order} from "./models/Order";
 
 declare interface IModels {
@@ -9,46 +7,53 @@ declare interface IModels {
     Order: IOrderModel;
 }
 
-export class ReadDataManager {
+export class ReadDataController {
+    public static get Models() {
+        if (!ReadDataController.instance) {
+            ReadDataController.instance = new ReadDataController();
+        }
+        return ReadDataController.instance.models;
+    }
 
-    private static instance: ReadDataManager;
+    public static getReadyStateSync(): number {
+        // @ts-ignore
+        return this.db.readyState || 0;
+    }
 
-    private db: Connection | undefined;
-    private models: IModels;
-
-    private dboptions = {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    };
-
-    constructor() {
+    public static async connect(): Promise<Connection> {
         if (!process.env.MONGODB_URL) {
             throw new Error("The required environment variable, MONGODB_URL does not exist or has no value");
         }
-        connect(process.env.MONGODB_URL, { useNewUrlParser: true });
-        this.db = connection;
+        if (!this.db) {
+            const conn = await connect(process.env.MONGODB_URL, {useNewUrlParser: true, useUnifiedTopology: true});
+            this.db = connection;
+        }
         this.db.on("open", this.connected);
         this.db.on("error", this.error);
 
+        return connection;
+    }
+    private static db: Connection | undefined;
+
+    private static instance: ReadDataController;
+
+    private static connected() {
+        // tslint:disable-next-line:no-console
+        console.log("Mongoose has connected");
+    }
+
+    private static error(error: Error)  {
+        // tslint:disable-next-line:no-console
+        console.log("Mongoose has errored", error);
+    }
+
+    public models: IModels;
+
+    constructor() {
         this.models = {
             Customer: new Customer().model,
             Order: new Order().model,
         };
     }
 
-    public static get Models() {
-        if (!ReadDataManager.instance) {
-            ReadDataManager.instance = new ReadDataManager();
-        }
-        return ReadDataManager.instance.models;
-    }
-    private connected() {
-        // tslint:disable-next-line:no-console
-        console.log("Mongoose has connected");
-    }
-
-    private error(error: Error)  {
-        // tslint:disable-next-line:no-console
-        console.log("Mongoose has errored", error);
-    }
 }

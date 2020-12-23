@@ -5,17 +5,18 @@ import {Customer} from "./entity/Customer";
 import {Order} from "./entity/Order";
 import {CustomerInput} from "./inputs/CustomerInput";
 import {OrderInput} from "./inputs/OrderInput";
-import {dbconfig} from "./ormconfig";
+import {getDBConfig} from "./ormconfig";
 
 export class WriteDataManager {
     public connection!: Connection;
     public async connectToDb(): Promise<Connection> {
+        const config = getDBConfig();
         if (getConnectionManager().has("default")) {
             // await getConnectionManager().get().close();
         }
 
         if (!this.connection) {
-            this.connection = await createConnection(dbconfig as ConnectionOptions);
+            this.connection = await createConnection(config as ConnectionOptions);
             // tslint:disable-next-line:no-console
             console.log(`Database connected at ${new Date()}`);
         }

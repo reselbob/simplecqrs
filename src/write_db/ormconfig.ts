@@ -1,4 +1,5 @@
-export const dbconfig = {
+export const getDBConfig = () => {
+    const obj = {
     cli: {
         entitiesDir: "src/write_db/entity",
         migrationsDir: "src/write_db/migration",
@@ -21,4 +22,6 @@ export const dbconfig = {
     synchronize: true,
     type: "mysql",
     username: "root",
+};
+    return obj;
 };

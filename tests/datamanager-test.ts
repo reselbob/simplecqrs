@@ -9,12 +9,12 @@ import {OrderInput} from "../src/write_db/inputs/OrderInput";
 
 import Faker from "faker";
 
-const dataManager: WriteDataManager = new WriteDataManager();
+const writeDataManager: WriteDataManager = new WriteDataManager();
 
 describe("WriteDataManager Tests", () => {
 
     after(async () => {
-        await dataManager.close();
+        await writeDataManager.close();
     });
     it("Can Save Order", async () => {
         const data = new OrderInput();
@@ -24,16 +24,16 @@ describe("WriteDataManager Tests", () => {
         data.description = Faker.lorem.words(4);
         data.count = Faker.random.number(10);
 
-        const result = await dataManager.setOrder(data);
+        const result = await writeDataManager.setOrder(data);
 
         expect(result).to.be.an("object");
         expect(result.customer).to.be.an("object");
 
-        const order = await dataManager.getOrder(result.id);
+        const order = await writeDataManager.getOrder(result.id);
         expect(order).to.be.an("object");
         expect(order.customer).to.be.an("object");
 
-        const customer = await dataManager.getCustomer(order.customer.email);
+        const customer = await writeDataManager.getCustomer(order.customer.email);
         expect(order.customer.firstName).to.equal(customer.firstName);
         expect(order.customer.lastName).to.equal(customer.lastName);
         expect(order.customer.email).to.equal(customer.email);
@@ -51,7 +51,7 @@ describe("WriteDataManager Tests", () => {
             input.description = Faker.lorem.words(4);
             input.count = Faker.random.number(10);
 
-            results.push(await dataManager.setOrder(input));
+            results.push(await writeDataManager.setOrder(input));
         }
         return results;
     };
@@ -61,7 +61,7 @@ describe("WriteDataManager Tests", () => {
         const orders   = await createOrders(10);
         expect(orders).to.be.an("array");
 
-        const result = await dataManager.getOrders();
+        const result = await writeDataManager.getOrders();
         result.forEach((order) => {
             expect(order.customer).to.be.an("object");
         });
@@ -69,7 +69,7 @@ describe("WriteDataManager Tests", () => {
     });
 
     it("Can get customers", async () => {
-        const result = await dataManager.getCustomers();
+        const result = await writeDataManager.getCustomers();
         result.forEach((customer: Customer) => {
             expect(customer.orders).to.be.an("array");
         });
