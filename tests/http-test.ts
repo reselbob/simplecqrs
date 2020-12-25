@@ -30,7 +30,7 @@ describe("HTTP Test", () => {
         const data: any = {};
         data.customerFirstName = Faker.name.firstName();
         data.customerLastName = Faker.name.lastName();
-        data.customerEmail = `${data.customerFirstName}.${data.customerLastName }@${Faker.internet.domainName()}`;
+        data.customerEmail = `${data.customerFirstName}.${data.customerLastName}@${Faker.internet.domainName()}`;
         data.description = Faker.lorem.words(4);
         data.count = Faker.random.number(10);
 
@@ -40,13 +40,13 @@ describe("HTTP Test", () => {
             .set("Content-type", "application/json")
             .send({data})
             .expect(200)
-            .then( (res: any) => {
+            .then((res: any) => {
                 const order = res.body;
-                expect(order.description).to.equal(data.description );
-                expect(order.count).to.equal(data.count );
-                expect(order.customer.email).to.equal(data.customerEmail );
-                expect(order.customer.firstName).to.equal(data.customerFirstName );
-                expect(order.customer.lastName).to.equal(data.customerLastName );
+                expect(order.description).to.equal(data.description);
+                expect(order.count).to.equal(data.count);
+                expect(order.customer.email).to.equal(data.customerEmail);
+                expect(order.customer.firstName).to.equal(data.customerFirstName);
+                expect(order.customer.lastName).to.equal(data.customerLastName);
                 // tslint:disable-next-line:no-console
                 console.log(order);
 
@@ -78,8 +78,8 @@ describe("HTTP Test", () => {
                     .expect(200)
                     .then((res2: any) => {
                         const customer = res2.body;
-                        expect(customer.email).to.equal(firstCustomer.email );
-                        expect(customer.firstName).to.equal(firstCustomer.firstName );
+                        expect(customer.email).to.equal(firstCustomer.email);
+                        expect(customer.firstName).to.equal(firstCustomer.firstName);
                         expect(customer.lastName).to.equal(firstCustomer.lastName);
                     });
             });
@@ -95,26 +95,27 @@ describe("HTTP Test", () => {
             .expect(200)
             .then((res: any) => {
                 firstOrder = res.body[0];
-                expect(res.body[0].id).to.be.a("string", "Users are good");
-                // await expect(res.body.length).to.be.greaterThan(0);
-            });
-
-        // @ts-ignore
-        await request(server)
-            .get(`/orders/${firstOrder.id}`)
-            .set("Accept", "application/json")
-            .expect(200)
-            .then((res: any) => {
-                const order = res.body;
-                expect(order.description).to.equal(firstOrder.description );
-                expect(order.count).to.equal(firstOrder.count );
-                expect(order.customer.email).to.equal(firstOrder.customer.email );
-                expect(order.customer.firstName).to.equal(firstOrder.customer.firstName );
-                expect(order.customer.lastName).to.equal(firstOrder.customer.lastName);
-
+                expect(res.body[0]._id).to.be.a("string");
                 // tslint:disable-next-line:no-console
-                console.log(order);
+                console.log(res.body[0]._id);
+            })
+            .then((res2: any) => {
+                request(server)
+                    .get(`/orders/${firstOrder.id}`)
+                    .set("Accept", "application/json")
+                    .expect(200)
+                    // tslint:disable-next-line:no-shadowed-variable
+                    .then((res2: any) => {
+                        const order = res2.body;
+                        expect(order.description).to.equal(firstOrder.description );
+                        expect(order.count).to.equal(firstOrder.count );
+                        expect(order.customer.email).to.equal(firstOrder.customer.email );
+                        expect(order.customer.firstName).to.equal(firstOrder.customer.firstName );
+                        expect(order.customer.lastName).to.equal(firstOrder.customer.lastName);
+
+                        // tslint:disable-next-line:no-console
+                        console.log(order);
+                    });
             });
     });
-
 }).timeout(20000);

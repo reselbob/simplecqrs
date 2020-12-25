@@ -2,10 +2,8 @@ import env from "dotenv";
 env.config();
 
 import express from "express";
-import {ICustomerInput, IOrderInput} from "./read_db/inputs/Inputs";
-import {IOrder} from "./read_db/models/IOrder";
+import {IOrderInput} from "./read_db/inputs/Inputs";
 import {ReadDataManager} from "./read_db/ReadDataManager";
-import {Order} from "./write_db/entity/Order";
 import {WriteDataManager} from "./write_db/WriteDataManager";
 
 // let's put the check here, for how. When we move the ReadDB into its own service thing will change.
