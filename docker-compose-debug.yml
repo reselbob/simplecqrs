@@ -1,13 +1,5 @@
 version: '3.3'
 services:
-  simplecqrs:
-    build: ./
-    ports:
-      - "4000:3000"
-    environment:
-      APP_PORT: 3000
-      MONGODB_URL: mongodb://mongodb:27017/simplecqrs_r
-      READ_DB_HOST: mariadb
   mariadb:
     image: mariadb
     restart: always
