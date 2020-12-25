@@ -37,7 +37,7 @@ describe("WriteDataManager Tests", () => {
         expect(order.customer.firstName).to.equal(customer.firstName);
         expect(order.customer.lastName).to.equal(customer.lastName);
         expect(order.customer.email).to.equal(customer.email);
-    });
+    }).timeout(10000);
 
     const createOrders = async (count: number) => {
         const results = [];
@@ -66,7 +66,7 @@ describe("WriteDataManager Tests", () => {
             expect(order.customer).to.be.an("object");
         });
 
-    });
+    }).timeout(10000);
 
     it("Can get customers", async () => {
         const result = await writeDataManager.getCustomers();
@@ -74,6 +74,5 @@ describe("WriteDataManager Tests", () => {
             expect(customer.orders).to.be.an("array");
         });
 
-    });
-
-}).timeout(5000);
+    }).timeout(10000);
+});

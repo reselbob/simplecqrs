@@ -22,7 +22,7 @@ describe("ReadWrite Tests", () => {
         const result = await readDataManager.getOrders();
         expect(result).to.be.an("array");
         expect(result.length).to.be.greaterThan(0, `Array length is ${result.length}`);
-    });
+    }).timeout(1000);
 
     it("Can Write Orders to Read DB", async () => {
         expect(connection).to.be.an("object");
@@ -59,5 +59,5 @@ describe("ReadWrite Tests", () => {
         expect(result.customer.firstName).to.equal(orderInput.customer.firstName);
         expect(result.customer.lastName).to.equal(orderInput.customer.lastName);
         expect(result.customer.email).to.equal(orderInput.customer.email);
-    });
-}).timeout(5000);
+    }).timeout(1000);
+});

@@ -39,7 +39,8 @@ export class ReadDataManager {
     }
 
     public async getOrders(): Promise<IOrder[]> {
-        return await ReadDataController.Models.Order.find();
+        const orders = await ReadDataController.Models.Order.find();
+        return orders;
     }
 
     public async getOrder(id: string): Promise<any> {
@@ -48,11 +49,11 @@ export class ReadDataManager {
 
     public async getCustomers(): Promise<ICustomer[]> {
 
-        return await ReadDataController.Models.Customer.find();
+        return ReadDataController.Models.Customer.find();
     }
 
     public async getCustomer(email: string): Promise<any> {
-        return await ReadDataController.Models.Customer.findOne({email});
+        return ReadDataController.Models.Customer.findOne({email});
     }
 
 }

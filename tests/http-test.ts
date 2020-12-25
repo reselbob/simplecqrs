@@ -56,7 +56,7 @@ describe("HTTP Test", () => {
                 // tslint:disable-next-line:no-console
                 console.log(err);
             });
-    });
+    }).timeout(5000);
 
     it("Can GET Customers via HTTP", async () => {
         let firstCustomer = new Customer();
@@ -84,7 +84,7 @@ describe("HTTP Test", () => {
                     });
             });
 
-    });
+    }).timeout(5000);
 
     it("Can GET Orders via HTTP", async () => {
         let firstOrder: Order = new Order();
@@ -117,5 +117,5 @@ describe("HTTP Test", () => {
                         console.log(order);
                     });
             });
-    });
-}).timeout(20000);
+    }).timeout(5000);
+});
