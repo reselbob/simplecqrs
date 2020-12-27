@@ -3,27 +3,26 @@ import {before, describe, it} from "mocha";
 import {v4 as uuidv4} from "uuid";
 import {MessageBroker} from "../src/broker/MessageBroker";
 import {IGenericInput} from "../src/read_db/inputs/Inputs";
-import {Customer} from "../src/write_db/entity/Customer";
 import {WriteDataManager} from "../src/write_db/WriteDataManager";
 
 import Faker from "faker";
 
-const writeDataManager: WriteDataManager = new WriteDataManager();
-const handler = async (message: any) => {
-    // tslint:disable-next-line:no-console
-    console.log(message);
-    expect(message).to.be.a("string");
-};
+let messageBroker: MessageBroker;
 
 const topic = "test_topic";
 describe("Basic Broker Tests", () => {
 
+    const groupId = "test-group";
+
     before(async () => {
-        await MessageBroker.addSubscriber(topic, handler);
+        // tslint:disable-next-line:no-console
+        console.log("Starting Broker Tests");
+        messageBroker = new MessageBroker();
     });
 
     after(async () => {
-        await MessageBroker.close();
+        // tslint:disable-next-line:no-console
+        console.log("Ending Broker Tests");
     });
 
     it("Can send and receive messsage from Broker", async () => {
@@ -40,7 +39,19 @@ describe("Basic Broker Tests", () => {
             lastName,
             quantity,
         };
-        const result = await MessageBroker.publish(message, topic);
-        expect(MessageBroker.subscribers).to.be.an("array");
-    }).timeout(10000);
-});
+        await messageBroker.publish(message, topic);
+
+        let counter: number = 4;
+
+        const handler = async (result: any) => {
+            expect(JSON.parse(result.message.value.toString())).to.be.an("object");
+            expect(result.message.key.toString()).to.be.a("string");
+            // tslint:disable-next-line:no-console
+            const obj = { message: JSON.parse(result.message.value.toString())};
+            // tslint:disable-next-line:no-console
+            console.log(result);
+            counter++;
+        };
+        await messageBroker.addSubscriber(groupId, topic, handler);
+    }).timeout(20000);
+}).timeout(20000);
