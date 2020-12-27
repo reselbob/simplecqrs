@@ -1,7 +1,6 @@
 import {expect} from "chai";
 import {before, describe, it} from "mocha";
 import {Customer} from "../src/write_db/entity/Customer";
-import {Order} from "../src/write_db/entity/Order";
 import {WriteDataManager} from "../src/write_db/WriteDataManager";
 
 import {CustomerInput} from "../src/write_db/inputs/CustomerInput";
