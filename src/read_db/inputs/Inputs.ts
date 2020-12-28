@@ -10,4 +10,3 @@ export interface ICustomerInput {
     firstName: string;
     lastName: string;
 }
-
