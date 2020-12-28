@@ -10,6 +10,7 @@ import {WriteDataManager} from "../src/write_db/WriteDataManager";
 import {server, shutdown} from "../src/app";
 
 import Faker from "faker";
+import {TestUtility} from "../utilities/TestUtility";
 
 const dataManager: WriteDataManager = new WriteDataManager();
 
@@ -27,30 +28,26 @@ describe("HTTP Test", () => {
     });
 
     it("Can POST order via HTTP", async () => {
-        const data: any = {};
-        data.customerFirstName = Faker.name.firstName();
-        data.customerLastName = Faker.name.lastName();
-        data.customerEmail = `${data.customerFirstName}.${data.customerLastName}@${Faker.internet.domainName()}`;
-        data.description = Faker.lorem.words(4);
-        data.count = Faker.random.number(10);
 
-        let orderId: string = "";
+        const genericOrder = TestUtility.createGenericOrderSync();
+
         await request(server)
             .post("/orders")
             .set("Content-type", "application/json")
-            .send({data})
+            .send({
+                    description: genericOrder.description,
+                    email: genericOrder.email,
+                    firstName: genericOrder.firstName,
+                    lastName: genericOrder.lastName,
+                    quantity: genericOrder.quantity,
+                },
+            )
             .expect(200)
             .then((res: any) => {
                 const order = res.body;
-                expect(order.description).to.equal(data.description);
-                expect(order.count).to.equal(data.count);
-                expect(order.customer.email).to.equal(data.customerEmail);
-                expect(order.customer.firstName).to.equal(data.customerFirstName);
-                expect(order.customer.lastName).to.equal(data.customerLastName);
+                expect(order.id).to.be.a("string");
                 // tslint:disable-next-line:no-console
                 console.log(order);
-
-                orderId = order.id;
             })
             .catch((err: Error) => {
                 // tslint:disable-next-line:no-console
@@ -107,10 +104,10 @@ describe("HTTP Test", () => {
                     // tslint:disable-next-line:no-shadowed-variable
                     .then((res2: any) => {
                         const order = res2.body;
-                        expect(order.description).to.equal(firstOrder.description );
-                        expect(order.count).to.equal(firstOrder.count );
-                        expect(order.customer.email).to.equal(firstOrder.customer.email );
-                        expect(order.customer.firstName).to.equal(firstOrder.customer.firstName );
+                        expect(order.description).to.equal(firstOrder.description);
+                        expect(order.count).to.equal(firstOrder.count);
+                        expect(order.customer.email).to.equal(firstOrder.customer.email);
+                        expect(order.customer.firstName).to.equal(firstOrder.customer.firstName);
                         expect(order.customer.lastName).to.equal(firstOrder.customer.lastName);
 
                         // tslint:disable-next-line:no-console

@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import {Connection} from "typeorm";
 import {ConnectionOptions, createConnection, getConnectionManager} from "typeorm";
+import {IGenericOrderInput} from "../interfaces/inputs";
 import {Customer} from "./entity/Customer";
 import {Order} from "./entity/Order";
 import {CustomerInput} from "./inputs/CustomerInput";
@@ -18,31 +19,29 @@ export class WriteDataManager {
         if (!this.connection) {
             this.connection = await createConnection(config as ConnectionOptions);
             // tslint:disable-next-line:no-console
-            console.log(`Database connected at ${new Date()}`);
+            console.log(`Write database connected at ${new Date()}`);
         }
         return this.connection;
     }
 
-    public async setOrder(data: OrderInput): Promise<Order> {
-        // confirm the customer exists
-        const input = data as OrderInput;
-        let customer = await this.getCustomer(input.customerEmail);
+    public async setOrder(data: IGenericOrderInput): Promise<Order> {
+        let customer = await this.getCustomer(data.email);
         if (!customer) {
-            if (!input.customerFirstName && !input.customerFirstName) {
+            if (!data.firstName && !data.lastName) {
                 throw new Error("Email for customer does not exist nor is full customer information provided.");
             }
         }
         if (!customer) {
             const obj = {
-                email: input.customerEmail,
-                firstName: input.customerFirstName,
-                lastName: input.customerLastName,
+                email: data.email,
+                firstName: data.firstName,
+                lastName: data.lastName,
             };
             customer = await this.setCustomer(obj as CustomerInput);
         }
         const order = new Order();
-        order.description = input.description;
-        order.count = input.count;
+        order.description = data.description;
+        order.count = data.quantity;
         order.customer = customer;
         const conn = await this.connectToDb();
         const result = await conn.manager.save(order);

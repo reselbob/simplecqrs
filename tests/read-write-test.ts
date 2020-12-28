@@ -6,9 +6,22 @@ import Faker from "faker";
 import {before, describe, it} from "mocha";
 import {Connection} from "mongoose";
 import { v4 as uuidv4 } from "uuid";
+import {MessageBroker} from "../src/broker/MessageBroker";
+import {Mediator} from "../src/mediator/Mediator";
+import {IReadDataManagerOptions} from "../src/read_db/options/IReadDataManagerOptions";
 import {ReadDataManager} from "../src/read_db/ReadDataManager";
+import {WriteDataManager} from "../src/write_db/WriteDataManager";
 
-const readDataManager: ReadDataManager = new ReadDataManager();
+const messageBroker = new MessageBroker();
+const mediator = new Mediator();
+
+const options: IReadDataManagerOptions = {
+    groupId: process.env.SIMPLECQRS_GROUPID || "simplecqrs",
+    messageBroker,
+    topic: mediator.getOnNewOrderTopicSync(),
+};
+
+const readDataManager: ReadDataManager = new ReadDataManager(options);
 let connection: Connection | undefined;
 
 describe("ReadWrite Tests", () => {

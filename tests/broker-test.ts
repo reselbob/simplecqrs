@@ -1,8 +1,9 @@
 import {expect} from "chai";
 import {before, describe, it} from "mocha";
 import {v4 as uuidv4} from "uuid";
+import {IOrderEvent} from "../src/broker/interfaces/IOnNewOrderEvent";
 import {MessageBroker} from "../src/broker/MessageBroker";
-import {IGenericInput} from "../src/read_db/inputs/Inputs";
+import {IGenericOrderInput} from "../src/interfaces/inputs";
 import {WriteDataManager} from "../src/write_db/WriteDataManager";
 
 import Faker from "faker";
@@ -31,12 +32,16 @@ describe("Basic Broker Tests", () => {
         const email = `${lastName}.${lastName}@${Faker.internet.domainName()}`;
         const quantity = Faker.random.number(10);
         const description = Faker.lorem.words(6);
+        const orderId = uuidv4();
+        const eventName = "OnNewOrder";
 
-        const message: IGenericInput = {
+        const message: IOrderEvent = {
             description,
             email,
+            eventName,
             firstName,
             lastName,
+            orderId,
             quantity,
         };
         await messageBroker.publish(message, topic);

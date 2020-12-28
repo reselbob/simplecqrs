@@ -48,7 +48,7 @@ services:
       KAFKA_BROKER_ID: 2
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     volumes:
-      - ./data/kafka2/data:/var/lib/kafka/data
+      - ./data/kafka/data:/var/lib/kafka/data
     depends_on:
       - zookeeper
   mongodb:

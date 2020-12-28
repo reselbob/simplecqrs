@@ -1,6 +1,6 @@
 import { Kafka } from "kafkajs";
 import { v4 as uuidv4 } from "uuid";
-import {IGenericInput} from "../read_db/inputs/Inputs";
+import {IOrderEvent} from "./interfaces/IOnNewOrderEvent";
 
 export class MessageBroker {
     public subscriber: any;
@@ -12,12 +12,12 @@ export class MessageBroker {
         clientId: `simplecqrs-${uuidv4()}`,
     });
 
-    public async publish(order: IGenericInput, topic: string): Promise<void> {
+    public async publish(event: IOrderEvent, topic: string): Promise<void> {
         await this.createPublisher();
         await this.publisher.send({
             messages: [
-                {   key: uuidv4(),
-                    value: JSON.stringify(order) },
+                {   key: event.orderId,
+                    value: JSON.stringify(event) },
             ],
             topic,
         });

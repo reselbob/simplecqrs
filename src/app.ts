@@ -2,6 +2,7 @@ import env from "dotenv";
 env.config();
 
 import express from "express";
+import {Mediator} from "./mediator/Mediator";
 import {IOrderInput} from "./read_db/inputs/Inputs";
 import {ReadDataManager} from "./read_db/ReadDataManager";
 import {WriteDataManager} from "./write_db/WriteDataManager";
@@ -11,8 +12,10 @@ if (!process.env.MONGODB_URL) {
     throw new Error("The required environment variable, MONGODB_URL does not exist or has no value");
 }
 
-const writeDataManager: WriteDataManager = new WriteDataManager();
-const readDataManager: ReadDataManager = new ReadDataManager();
+// const writeDataManager: WriteDataManager = new WriteDataManager();
+// const readDataManager: ReadDataManager = new ReadDataManager();
+
+const mediator = new Mediator();
 
 const app = express();
 const port = process.env.APP_PORT || 3000;
@@ -27,7 +30,7 @@ app.use((err: { stack: any; }, req: any, res: { status: (arg0: number) => { send
 });
 
 app.get("/customers", async (req, res) => {
-    const customers = await readDataManager.getCustomers()
+    const customers = await mediator.getCustomers()
         .catch((err: Error) => {
             res.status(500).send(JSON.stringify(err));
         });
@@ -35,7 +38,7 @@ app.get("/customers", async (req, res) => {
 });
 
 app.get("/customers/:id", async (req, res) => {
-    const customer = await readDataManager.getCustomer(req.params.id)
+    const customer = await mediator.getCustomer(req.params.id)
         .catch((err: Error) => {
             res.status(500).send(err);
         });
@@ -43,7 +46,7 @@ app.get("/customers/:id", async (req, res) => {
 });
 
 app.get("/orders", async (req, res) => {
-  const orders = await readDataManager.getOrders()
+  const orders = await mediator.getOrders()
       .catch((err: Error) => {
         res.status(500).send(err);
       });
@@ -51,7 +54,7 @@ app.get("/orders", async (req, res) => {
 });
 
 app.get("/orders/:id", async (req, res) => {
-    const order = await readDataManager.getOrder(req.params.id)
+    const order = await mediator.getOrder(req.params.id)
         .catch((err: Error) => {
             res.status(500).send(err);
         });
@@ -60,8 +63,10 @@ app.get("/orders/:id", async (req, res) => {
 
 app.post("/orders", async (req, res) => {
     const orderInput = req.body;
+
+    /*
     const input = orderInput.data || orderInput;
-    const order: any = await writeDataManager.setOrder(input)
+    const order: any = await mediator.setOrder(input)
         .catch((err: Error) => {
             res.status(500).send(err);
         });
@@ -78,13 +83,15 @@ app.post("/orders", async (req, res) => {
         },
         description: input.description,
     };
-    await readDataManager.setOrder(readInput);
-    res.send(order);
+
+     */
+    const id: string = await mediator.setOrder(orderInput);
+    res.send({id});
 });
 
 // @ts-ignore
 export const server = app.listen(port, async (err) => {
-    await readDataManager.connect();
+    await mediator.connect();
     // tslint:disable-next-line:no-console
     console.log(`Read database connected at ${new Date()}`);
     // @ts-ignore

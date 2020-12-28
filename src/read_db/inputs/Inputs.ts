@@ -11,10 +11,3 @@ export interface ICustomerInput {
     lastName: string;
 }
 
-export interface IGenericInput {
-    description: string;
-    quantity: number;
-    email: string;
-    firstName: string;
-    lastName: string;
-}

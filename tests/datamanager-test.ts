@@ -1,5 +1,6 @@
 import {expect} from "chai";
 import {before, describe, it} from "mocha";
+import {IGenericOrderInput} from "../src/interfaces/inputs";
 import {Customer} from "../src/write_db/entity/Customer";
 import {WriteDataManager} from "../src/write_db/WriteDataManager";
 
@@ -11,18 +12,11 @@ import Faker from "faker";
 const writeDataManager: WriteDataManager = new WriteDataManager();
 
 describe("WriteDataManager Tests", () => {
-
     after(async () => {
         await writeDataManager.close();
     });
     it("Can Save Order", async () => {
-        const data = new OrderInput();
-        data.customerFirstName = Faker.name.firstName();
-        data.customerLastName = Faker.name.lastName();
-        data.customerEmail = `${data.customerFirstName}.${data.customerLastName }@${Faker.internet.domainName()}`;
-        data.description = Faker.lorem.words(4);
-        data.count = Faker.random.number(10);
-
+        const data = createOrderSync();
         const result = await writeDataManager.setOrder(data);
 
         expect(result).to.be.an("object");
@@ -38,18 +32,27 @@ describe("WriteDataManager Tests", () => {
         expect(order.customer.email).to.equal(customer.email);
     }).timeout(10000);
 
+    const createOrderSync = () => {
+        const firstName = Faker.name.firstName();
+        const lastName = Faker.name.lastName();
+        const email =  `${firstName}.${lastName }@${Faker.internet.domainName()}`;
+        const description =  Faker.lorem.words(4);
+        const quantity = Faker.random.number(10);
+        const input: IGenericOrderInput = {
+            description,
+            email,
+            firstName,
+            lastName,
+            quantity,
+        };
+        return input;
+    };
+
     const createOrders = async (count: number) => {
         const results = [];
         let i;
         for (i = 0; i < count; i++) {
-            const input = new OrderInput();
-            input.customerFirstName = Faker.name.firstName();
-            input.customerLastName = Faker.name.lastName();
-            // tslint:disable-next-line:max-line-length
-            input.customerEmail = `${input.customerFirstName}.${input.customerLastName }@${Faker.internet.domainName()}`;
-            input.description = Faker.lorem.words(4);
-            input.count = Faker.random.number(10);
-
+            const input = createOrderSync();
             results.push(await writeDataManager.setOrder(input));
         }
         return results;
