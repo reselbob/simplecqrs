@@ -1,5 +1,4 @@
 import axios from "axios";
-import Faker from "faker";
 import {TestUtility} from "../testUtility/TestUtility";
 
 export class Seeder {
