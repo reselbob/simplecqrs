@@ -9,7 +9,7 @@ export const getDBConfig = () => {
     entities: [
         `${__dirname}/entity/**/*{.ts,.js}`,
     ],
-    host: `${process.env.READ_DB_HOST || "localhost"}`,
+    host: `${process.env.WRITE_DB_HOST || "localhost"}`,
     logging: false,
     migrations: [
         `${__dirname}/migration/**/*{.ts,.js}`,

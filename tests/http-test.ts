@@ -3,14 +3,12 @@ import {before, describe, it} from "mocha";
 import request from "supertest";
 import {Customer} from "../src/write_db/entity/Customer";
 import {Order} from "../src/write_db/entity/Order";
-import {CustomerInput} from "../src/write_db/inputs/CustomerInput";
-import {OrderInput} from "../src/write_db/inputs/OrderInput";
 import {WriteDataManager} from "../src/write_db/WriteDataManager";
 
 import {server, shutdown} from "../src/app";
 
 import Faker from "faker";
-import {TestUtility} from "../utilities/TestUtility";
+import {TestUtility} from "../utilities/testUtility/TestUtility";
 
 const dataManager: WriteDataManager = new WriteDataManager();
 

@@ -8,7 +8,7 @@ import {Mediator} from "../src/mediator/Mediator";
 import {WriteDataManager} from "../src/write_db/WriteDataManager";
 
 import Faker from "faker";
-import {TestUtility} from "../utilities/TestUtility";
+import {TestUtility} from "../utilities/testUtility/TestUtility";
 
 let mediator: Mediator;
 

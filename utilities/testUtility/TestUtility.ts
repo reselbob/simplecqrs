@@ -1,5 +1,5 @@
 import Faker from "faker";
-import {IGenericOrderInput} from "../src/interfaces/inputs";
+import {IGenericOrderInput} from "../../src/interfaces/inputs";
 
 export class TestUtility {
     public static createGenericOrderSync(): IGenericOrderInput {

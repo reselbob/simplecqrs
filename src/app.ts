@@ -3,10 +3,6 @@ env.config();
 
 import express from "express";
 import {Mediator} from "./mediator/Mediator";
-import {IOrderInput} from "./read_db/inputs/Inputs";
-import {ReadDataManager} from "./read_db/ReadDataManager";
-import {WriteDataManager} from "./write_db/WriteDataManager";
-
 // let's put the check here, for how. When we move the ReadDB into its own service thing will change.
 if (!process.env.MONGODB_URL) {
     throw new Error("The required environment variable, MONGODB_URL does not exist or has no value");
@@ -63,28 +59,6 @@ app.get("/orders/:id", async (req, res) => {
 
 app.post("/orders", async (req, res) => {
     const orderInput = req.body;
-
-    /*
-    const input = orderInput.data || orderInput;
-    const order: any = await mediator.setOrder(input)
-        .catch((err: Error) => {
-            res.status(500).send(err);
-        });
-
-    // TODO the quantity to count conversion is a danger sign
-    const readInput: IOrderInput = {
-        _id: order.id,
-        quantity: input.count,
-        // tslint:disable-next-line:object-literal-sort-keys
-        customer: {
-            email: input.customerEmail,
-            firstName: input.customerFirstName,
-            lastName: input.customerLastName,
-        },
-        description: input.description,
-    };
-
-     */
     const id: string = await mediator.setOrder(orderInput);
     res.send({id});
 });
