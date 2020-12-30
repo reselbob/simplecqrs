@@ -24,6 +24,7 @@ services:
       - "./data:/var/lib/mysql:rw"
   zookeeper:
     image: zookeeper:3.4.9
+    restart: always
     hostname: zookeeper
     ports:
       - "2181:2181"
