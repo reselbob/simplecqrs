@@ -11,4 +11,5 @@ seeder.seed(10)
     .then(() => {
         // tslint:disable-next-line:no-console
         console.log("seeding complete");
+        process.exit(0);
     });
