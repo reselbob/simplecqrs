@@ -5,6 +5,7 @@
   "main": "distx/src/app.js",
   "scripts": {
     "start": "tsc && ts-node dist/src/app.js",
+    "seed": "tsc && ts-node dist/utilities/seeder/index.js --targetUrl=http://localhost:9001/orders",
     "test": "mocha -r ts-node/register tests/**/*-test.ts --exit"
   },
   "repository": {
