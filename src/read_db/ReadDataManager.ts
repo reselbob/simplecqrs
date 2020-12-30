@@ -110,7 +110,7 @@ export class ReadDataManager {
             };
 
             // tslint:disable-next-line:no-console
-            console.log(`Setting order: ${input}`);
+            console.log(`Setting order: ${JSON.stringify(input)}`);
             await setOrder(input);
         }
     }
