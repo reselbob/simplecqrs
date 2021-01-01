@@ -23,7 +23,6 @@ export class Mediator {
 
         this.readDataManager = new ReadDataManager(options);
         this.writeDataManager = new WriteDataManager();
-
     }
 
     public async connect(): Promise<void> {
