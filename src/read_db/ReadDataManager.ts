@@ -16,7 +16,6 @@ export class ReadDataManager {
         this.messageBroker = options.messageBroker;
         this.messageBroker.addSubscriber(options.groupId, options.topic, this.handler)
             .then((result) => {
-                // tslint:disable-next-line:no-console
                 console.log(`ReadDataManager Subscriber wired in at ${new Date()}`);
             });
     }
@@ -42,14 +41,12 @@ export class ReadDataManager {
         order.customer.lastName = orderInput.customer.lastName;
         const result = await order.save()
             .catch((e: Error) => {
-                // tslint:disable-next-line:no-console
                 console.error(e);
             });
 
         const query = {email: orderInput.customer.email};
         // Upsert upsert the customer in the customer collection
         await ReadDataController.Models.Customer.findOneAndUpdate(query, orderInput.customer, {upsert: true});
-        // tslint:disable-next-line:no-console
         return result;
     }
 
@@ -72,10 +69,7 @@ export class ReadDataManager {
     }
 
     public async handler(event: IBrokerMessage): Promise<void> {
-        // Yes, using setOrder this way is redundant. But the Typescript
-        // is inot respecting the members of the class when compiling. strange.
-        // @ts-ignore
-        const setOrder =  async (orderInput) => {
+        const addOrder =  async (orderInput: IOrderInput) => {
             const order = new ReadDataController.Models.Order();
             order._id = orderInput._id;
             order.description = orderInput.description;
@@ -85,14 +79,12 @@ export class ReadDataManager {
             order.customer.lastName = orderInput.customer.lastName;
             const result = await order.save()
                 .catch((e: Error) => {
-                    // tslint:disable-next-line:no-console
                     console.error(e);
                 });
 
             const query = {email: orderInput.customer.email};
-            // Upsert upsert the customer in the customer collection
+            // Upsert the customer in the customer collection
             await ReadDataController.Models.Customer.findOneAndUpdate(query, orderInput.customer, {upsert: true});
-            // tslint:disable-next-line:no-console
             return result;
         };
 
@@ -108,10 +100,8 @@ export class ReadDataManager {
                 description: data.description,
                 quantity: data.quantity,
             };
-
-            // tslint:disable-next-line:no-console
             console.log(`Setting order: ${JSON.stringify(input)}`);
-            await setOrder(input);
+            await addOrder(input);
         }
     }
 
