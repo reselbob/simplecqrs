@@ -45,7 +45,7 @@ describe("ReadWrite Tests", () => {
         const lastName = Faker.name.lastName();
         const email = `${lastName}.${lastName}@${Faker.internet.domainName()}`;
         const id = uuidv4();
-        const quantity =  Faker.random.number(10);
+        const quantity =  Faker.datatype.number(10);
         const description =  Faker.lorem.words(6);
         // tslint:disable-next-line:variable-name
         const _id = uuidv4();

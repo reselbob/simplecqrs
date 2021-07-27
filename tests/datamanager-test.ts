@@ -37,7 +37,7 @@ describe("WriteDataManager Tests", () => {
         const lastName = Faker.name.lastName();
         const email =  `${firstName}.${lastName }@${Faker.internet.domainName()}`;
         const description =  Faker.lorem.words(4);
-        const quantity = Faker.random.number(10);
+        const quantity = Faker.datatype.number(10);
         const input: IGenericOrderInput = {
             description,
             email,
