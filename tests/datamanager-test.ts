@@ -22,7 +22,7 @@ describe("WriteDataManager Tests", () => {
         data.customerLastName = Faker.name.lastName();
         data.customerEmail = `${data.customerFirstName}.${data.customerLastName }@${Faker.internet.domainName()}`;
         data.description = Faker.lorem.words(4);
-        data.count = Faker.random.number(10);
+        data.count = Faker.datatype.number(10);
 
         const result = await writeDataManager.setOrder(data);
 
@@ -49,7 +49,7 @@ describe("WriteDataManager Tests", () => {
             // tslint:disable-next-line:max-line-length
             input.customerEmail = `${input.customerFirstName}.${input.customerLastName }@${Faker.internet.domainName()}`;
             input.description = Faker.lorem.words(4);
-            input.count = Faker.random.number(10);
+            input.count = Faker.datatype.number(10);
 
             results.push(await writeDataManager.setOrder(input));
         }

@@ -7,7 +7,7 @@ export class TestUtility {
         const customerLastName = Faker.name.lastName();
         const customerEmail =  `${customerFirstName}.${customerLastName }@${Faker.internet.domainName()}`;
         const description =  Faker.lorem.words(4);
-        const count = Faker.random.number(10);
+        const count = Faker.datatype.number(10);
         const input: OrderInput = {
             count,
             customerEmail,
