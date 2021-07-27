@@ -32,7 +32,7 @@ describe("HTTP Test", () => {
         data.customerLastName = Faker.name.lastName();
         data.customerEmail = `${data.customerFirstName}.${data.customerLastName }@${Faker.internet.domainName()}`;
         data.description = Faker.lorem.words(4);
-        data.count = Faker.random.number(10);
+        data.count = Faker.datatype.number(10);
 
         let orderId: string = "";
         await request(server)
