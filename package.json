@@ -29,8 +29,7 @@
     "@types/supertest": "^2.0.10",
     "supertest": "^4.0.2",
     "tslint": "^5.12.1",
-    "typeorm": "^0.2.29",
-    "typescript": "^3.3.3"
+    "typeorm": "^0.2.29"
   },
   "dependencies": {
     "@types/axios": "^0.14.0",
